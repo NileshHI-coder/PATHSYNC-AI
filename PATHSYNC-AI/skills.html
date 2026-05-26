@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Gap Analyzer - PathSync AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .skill-tag {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.2);
+            color: #a5b4fc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        .skill-tag.missing {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        .skill-tag.core {
+            background: rgba(6, 182, 212, 0.2);
+            color: #67e8f9;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--glass-border);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <nav></nav>
+
+    <div class="container">
+        <h1>AI Skill Gap <span class="highlight-gradient">Analyzer</span></h1>
+        <p class="text-muted" style="margin-bottom: 2rem;">
+            Enter your target job role and AI will generate a complete skill requirement list.
+        </p>
+
+        <div class="glass-card" style="max-width: 700px; margin: 0 auto 2rem;">
+            <select id="jobRole" class="input-field">
+    
+    <option value="">Select Target Career</option>
+
+    <option value="AI Engineer">AI Engineer</option>
+
+    <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+
+    <option value="Full Stack Developer">Full Stack Developer</option>
+
+    <option value="Frontend Developer">Frontend Developer</option>
+
+    <option value="Backend Developer">Backend Developer</option>
+
+    <option value="Data Scientist">Data Scientist</option>
+
+    <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+
+    <option value="Cloud Engineer">Cloud Engineer</option>
+
+    <option value="UI/UX Designer">UI/UX Designer</option>
+
+    <option value="Mobile App Developer">Mobile App Developer</option>
+
+    <option value="DevOps Engineer">DevOps Engineer</option>
+
+</select>
+            
+            <h3>💼 Your Current Skills (comma separated)</h3>
+            <textarea id="currentSkills" rows="3" placeholder="e.g., HTML, CSS, JavaScript"></textarea>
+            
+            <button onclick="analyzeSkills()" class="btn btn-primary" style="width: 100%;">
+                Analyze Skills with AI
+            </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="glass-card" style="display: none; text-align: center;">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 10px;">AI is analyzing market requirements...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="results" style="display: none;">
+            <h2>Analysis Results for <span id="targetRole" class="highlight-gradient"></span></h2>
+            
+            <!-- Core Skills -->
+            <div class="glass-card">
+                <h3>🔥 Core Skills Required</h3>
+                <div id="coreSkills" style="margin-top: 10px;"></div>
+            </div>
+            
+            <!-- Missing Skills -->
+            <div class="glass-card" style="margin-top: 20px;">
+                <h3>📚 Skills to Learn (Gap Analysis)</h3>
+                <div id="missingSkills" style="margin-top: 10px;"></div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="glass-card" style="margin-top: 20px;">
+                <h3>📖 Learning Recommendations</h3>
+                <ul id="recommendations" style="padding-left: 20px; color: var(--text-muted); margin-top: 10px;"></ul>
+            </div>
+        </div>
+    </div>
+
+  
+  <script>
+
+const skillDatabase = {
+
+    "AI Engineer": {
+        core: [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "TensorFlow",
+            "PyTorch"
+        ],
+
+        all: [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "TensorFlow",
+            "PyTorch",
+            "Statistics",
+            "NLP",
+            "Computer Vision",
+            "Git",
+            "Data Structures"
+        ],
+
+        resources: [
+            "Andrew Ng Machine Learning Course",
+            "TensorFlow Documentation",
+            "Kaggle Practice Projects"
+        ]
+    },
+
+    "Machine Learning Engineer": {
+        core: [
+            "Python",
+            "Scikit-learn",
+            "TensorFlow",
+            "PyTorch"
+        ],
+
+        all: [
+            "Python",
+            "Scikit-learn",
+            "TensorFlow",
+            "PyTorch",
+            "Feature Engineering",
+            "MLOps",
+            "Data Analysis",
+            "SQL",
+            "Model Deployment"
+        ],
+
+        resources: [
+            "Coursera ML Specialization",
+            "Scikit-learn Documentation",
+            "Kaggle ML Projects"
+        ]
+    },
+
+    "Frontend Developer": {
+        core: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React"
+        ],
+
+        all: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Git",
+            "Responsive Design",
+            "REST APIs",
+            "Tailwind CSS"
+        ],
+
+        resources: [
+            "freeCodeCamp",
+            "MDN Web Docs",
+            "JavaScript.info"
+        ]
+    },
+
+    "Backend Developer": {
+        core: [
+            "Node.js",
+            "Express.js",
+            "MongoDB",
+            "REST APIs"
+        ],
+
+        all: [
+            "Node.js",
+            "Express.js",
+            "MongoDB",
+            "REST APIs",
+            "JWT Authentication",
+            "SQL",
+            "Git",
+            "Firebase"
+        ],
+
+        resources: [
+            "Node.js Docs",
+            "MongoDB University",
+            "Backend Projects Practice"
+        ]
+    },
+
+    "Full Stack Developer": {
+        core: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Node.js"
+        ],
+
+        all: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Node.js",
+            "MongoDB",
+            "Git",
+            "REST APIs",
+            "Firebase"
+        ],
+
+        resources: [
+            "The Odin Project",
+            "freeCodeCamp",
+            "Full Stack Open"
+        ]
+    },
+
+    "Data Scientist": {
+        core: [
+            "Python",
+            "Pandas",
+            "Machine Learning",
+            "Statistics"
+        ],
+
+        all: [
+            "Python",
+            "Pandas",
+            "Machine Learning",
+            "Statistics",
+            "SQL",
+            "Data Visualization",
+            "TensorFlow"
+        ],
+
+        resources: [
+            "Kaggle",
+            "DataCamp",
+            "Python for Data Science"
+        ]
+    },
+
+    "Cybersecurity Analyst": {
+        core: [
+            "Networking",
+            "Linux",
+            "Ethical Hacking",
+            "Cyber Security"
+        ],
+
+        all: [
+            "Networking",
+            "Linux",
+            "Ethical Hacking",
+            "Penetration Testing",
+            "Wireshark",
+            "Cryptography",
+            "Risk Analysis",
+            "Security Monitoring"
+        ],
+
+        resources: [
+            "TryHackMe",
+            "Hack The Box",
+            "Cisco Networking Academy"
+        ]
+    },
+
+    "Cloud Engineer": {
+        core: [
+            "AWS",
+            "Linux",
+            "Docker",
+            "Networking"
+        ],
+
+        all: [
+            "AWS",
+            "Azure",
+            "Google Cloud",
+            "Docker",
+            "Kubernetes",
+            "Cloud Security",
+            "Terraform",
+            "Linux"
+        ],
+
+        resources: [
+            "AWS Training",
+            "Google Cloud Skills Boost",
+            "Docker Documentation"
+        ]
+    },
+
+    "UI/UX Designer": {
+        core: [
+            "Figma",
+            "Wireframing",
+            "User Research",
+            "Prototyping"
+        ],
+
+        all: [
+            "Figma",
+            "Wireframing",
+            "User Research",
+            "Prototyping",
+            "Typography",
+            "Color Theory",
+            "Design Thinking",
+            "User Experience"
+        ],
+
+        resources: [
+            "Google UX Design Course",
+            "Figma Academy",
+            "UX Design Institute"
+        ]
+    },
+
+    "Mobile App Developer": {
+        core: [
+            "Flutter",
+            "Dart",
+            "Firebase",
+            "API Integration"
+        ],
+
+        all: [
+            "Flutter",
+            "Dart",
+            "Firebase",
+            "Android Development",
+            "iOS Development",
+            "UI Design",
+            "REST APIs",
+            "State Management"
+        ],
+
+        resources: [
+            "Flutter Documentation",
+            "Firebase Docs",
+            "CodeWithHarry Flutter"
+        ]
+    },
+
+    "DevOps Engineer": {
+        core: [
+            "Linux",
+            "Docker",
+            "CI/CD",
+            "AWS"
+        ],
+
+        all: [
+            "Linux",
+            "Docker",
+            "Kubernetes",
+            "CI/CD",
+            "Jenkins",
+            "AWS",
+            "Terraform",
+            "Monitoring Tools"
+        ],
+
+        resources: [
+            "Docker Docs",
+            "Kubernetes.io",
+            "AWS DevOps Learning Path"
+        ]
+    }
+
+};
+
+async function analyzeSkills() {
+
+    const jobRole = document.getElementById('jobRole').value.trim();
+    const currentSkills = document.getElementById('currentSkills').value.trim();
+
+    if (!jobRole) {
+        alert('Please select a target job role!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+
+    try {
+
+        const data = skillDatabase[jobRole];
+
+        if (!data) {
+            alert("No data found for selected role.");
+            return;
+        }
+
+        const coreSkills = data.core;
+        const allSkills = data.all;
+        const resources = data.resources;
+
+        // ✅ FIXED SKILL PARSING
+        const userSkillsArray = currentSkills
+            .toLowerCase()
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+
+        // ✅ FIXED GAP LOGIC
+        const missing = allSkills.filter(skill =>
+            !userSkillsArray.includes(skill.toLowerCase())
+        );
+
+        // Show Role
+        document.getElementById('targetRole').innerText = jobRole;
+
+        // Core Skills
+        const coreContainer = document.getElementById('coreSkills');
+        coreContainer.innerHTML = coreSkills
+            .map(skill => `<span class="skill-tag core">${skill}</span>`)
+            .join('');
+
+        // Missing Skills (FIXED DISPLAY)
+        const missingContainer = document.getElementById('missingSkills');
+
+        if (missing.length === 0) {
+            missingContainer.innerHTML =
+                `<p style="color: #67e8f9;">🎉 No skill gap found! You're job-ready.</p>`;
+        } else {
+            missingContainer.innerHTML = missing
+                .map(skill => `<span class="skill-tag missing">${skill}</span>`)
+                .join('');
+        }
+
+        // Resources
+        const recContainer = document.getElementById('recommendations');
+        recContainer.innerHTML = resources
+            .map(resource => `<li>${resource}</li>`)
+            .join('');
+
+        // Show Results
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong.");
+        document.getElementById('loading').style.display = 'none';
+    }
+}
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/app.js"></script>
+</html>

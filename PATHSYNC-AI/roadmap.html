@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Roadmap - PathSync AI</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+
+        .timeline {
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            border-left: 3px solid #6366f1;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            background: #6366f1;
+            border-radius: 50%;
+        }
+
+        .timeline-item h4 {
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <nav></nav>
+
+    <div class="container">
+
+        <h1>
+            AI Career
+            <span class="highlight-gradient">
+                Roadmap Generator
+            </span>
+        </h1>
+
+        <div class="glass-card" style="margin-bottom: 2rem;">
+
+            <h3>Define Your Goal</h3>
+
+<input
+    type="text"
+    id="careerGoal"
+    placeholder="Enter your career goal (e.g. AI Engineer)"
+>
+
+</select>
+
+            <select id="experience">
+
+                <option>
+                    Student
+                </option>
+
+                <option>
+                    Fresh Graduate
+                </option>
+
+                <option>
+                    Career Switcher
+                </option>
+
+            </select>
+
+            <button onclick="generateRoadmap()" class="btn btn-primary">
+                Generate Roadmap
+            </button>
+
+        </div>
+
+        <div id="roadmapResult" style="display: none;">
+
+            <h2>Your Personalized Path</h2>
+
+            <div class="glass-card">
+
+                <div class="timeline">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const roadmapData = {
+
+            "Full Stack Developer": [
+
+                {
+                    phase: "Phase 1: Foundations (Month 1-2)",
+                    detail: "Learn HTML, CSS, JavaScript and Git fundamentals."
+                },
+
+                {
+                    phase: "Phase 2: Frontend & Backend (Month 3-4)",
+                    detail: "Learn React, Node.js, Express.js and MongoDB."
+                },
+
+                {
+                    phase: "Phase 3: Real Projects (Month 5-6)",
+                    detail: "Build full-stack applications and deploy on Render."
+                }
+
+            ],
+
+            "AI Engineer": [
+
+                {
+                    phase: "Phase 1: Python & Math (Month 1-2)",
+                    detail: "Learn Python, Statistics, NumPy and Pandas."
+                },
+
+                {
+                    phase: "Phase 2: Machine Learning (Month 3-4)",
+                    detail: "Learn Scikit-learn, TensorFlow and Deep Learning."
+                },
+
+                {
+                    phase: "Phase 3: AI Projects (Month 5-6)",
+                    detail: "Build AI chatbots, recommendation systems and ML apps."
+                }
+
+            ],
+
+            "Data Scientist": [
+
+                {
+                    phase: "Phase 1: Data Analysis",
+                    detail: "Learn Python, Pandas and Data Cleaning."
+                },
+
+                {
+                    phase: "Phase 2: Visualization",
+                    detail: "Learn SQL, Matplotlib and Power BI."
+                },
+
+                {
+                    phase: "Phase 3: Machine Learning",
+                    detail: "Create prediction models and analytics dashboards."
+                }
+
+            ],
+
+            "Cybersecurity Analyst": [
+
+                {
+                    phase: "Phase 1: Networking Basics",
+                    detail: "Learn Networking, Linux and Security Fundamentals."
+                },
+
+                {
+                    phase: "Phase 2: Ethical Hacking",
+                    detail: "Learn penetration testing and vulnerability scanning."
+                },
+
+                {
+                    phase: "Phase 3: Security Labs",
+                    detail: "Practice cybersecurity labs and real-world scenarios."
+                }
+
+            ],
+
+            "UI/UX Designer": [
+
+                {
+                    phase: "Phase 1: Design Fundamentals",
+                    detail: "Learn typography, color theory and UI principles."
+                },
+
+                {
+                    phase: "Phase 2: Figma & Prototyping",
+                    detail: "Learn wireframing, user research and prototyping."
+                },
+
+                {
+                    phase: "Phase 3: Portfolio Building",
+                    detail: "Create professional case studies and UI projects."
+                }
+
+            ]
+
+        };
+
+        function generateRoadmap() {
+
+            const goal =
+                document.getElementById('careerGoal').value;
+
+            const result =
+                document.getElementById('roadmapResult');
+
+            const timeline =
+                document.querySelector('.timeline');
+
+            if(goal === '') {
+
+                alert('Please select a career goal');
+
+                return;
+            }
+
+            const roadmap =
+                roadmapData[goal];
+
+            timeline.innerHTML = '';
+
+            roadmap.forEach(item => {
+
+                timeline.innerHTML += `
+
+                    <div class="timeline-item">
+
+                        <h4>${item.phase}</h4>
+
+                        <p>${item.detail}</p>
+
+                    </div>
+
+                `;
+            });
+
+            result.style.display = 'block';
+        }
+
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <script src="js/firebase.js"></script>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>
