@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PathSync AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav></nav>
+
+    <div class="container">
+        <!-- Name will be updated by JS -->
+        <h1>Welcome back, <span class="highlight-gradient" id="userName">Student</span> 👋</h1>
+        
+        <p class="text-muted" style="margin-bottom: 2rem;">
+            Goal: <span id="careerGoal" style="color: var(--accent);">Wanted to become successfull in life</span>
+        </p>
+
+        <div class="grid-3">
+            <!-- Dynamic Stats with IDs -->
+            <div class="glass-card stat-card">
+                <div class="stat-number" id="profileScore">10%</div>
+                <div>Profile Completion</div>
+            </div>
+            
+            <div class="glass-card stat-card">
+                <div class="stat-number" id="skillsCount">0</div>
+                <div>Skills Acquired</div>
+            </div>
+            
+            <div class="glass-card stat-card">
+                <div class="stat-number" id="projectsCount">0</div>
+                <div>Active Projects</div>
+            </div>
+            
+            <div class="glass-card stat-card">
+                <div class="stat-number" id="streakCount">1</div>
+                <div>Day Streak 🔥</div>
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        <h2 style="margin-top: 3rem;">AI Recommendations</h2>
+        <div class="glass-card">
+            <p><strong>Next Step:</strong> Complete your profile to get personalized recommendations.</p>
+            <a href="roadmap.html" class="btn btn-outline" style="margin-top: 10px; display: inline-block;">View Roadmap</a>
+        </div>
+
+        <!-- Milestones -->
+        <h2 style="margin-top: 3rem;">Upcoming Milestones</h2>
+        <div class="glass-card">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Complete Profile Setup</h4>
+                    <p class="text-muted">Add your skills and goals</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
