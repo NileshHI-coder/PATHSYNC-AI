@@ -146,7 +146,7 @@ const App = {
 
 
 // --- AI Logic ---
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "YOUR_API_KEY";
 
 async function getAIResponse(prompt) {
 
