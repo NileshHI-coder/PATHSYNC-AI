@@ -163,7 +163,6 @@ To run the AI chatbot locally:
 
 2. Add your key in the project configuration file:
 
-```javascript
 const API_KEY = "YOUR_GROQ_API_KEY";
 
 3. Run the project locally.
@@ -191,7 +190,7 @@ Future plans include:
 
 
 ---
-
+```
 # 📂 Project Structure
 
 ```bash
@@ -213,8 +212,6 @@ PathSync---AI/
 │
 └── assets/
 ```
-
----
 
 # 🔮 Future Enhancements
 
