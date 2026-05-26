@@ -109,7 +109,8 @@ Secure login system with:
 
 ## Hosting
 
-* Local Host  - http://127.0.0.1:5500/index.html
+* Vercel  - https://pathsync-ai-two.vercel.app/
+
 
 ---
 
